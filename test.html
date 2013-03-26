@@ -1,0 +1,51 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+        <script language="javascript" src="easeljs-0.6.0.min.js" type="text/javascript"></script>   
+</head>
+<body  onload="init();">
+        <script type='text/javascript'>
+            var stage;
+            function init() {
+
+                // create a new stage and point it at our canvas:
+                stage = new createjs.Stage(document.getElementById("testCanvas"));
+
+                // Define a spritesheet. Note that this data was exported by ZoÃ«.
+                var ss = new createjs.SpriteSheet({
+                    "animations":
+                    {
+                        "run": [0, 10,false]//,
+                      //  "jump": [26, 63, "run"]
+                    },
+                    "images": ["images/ExplosionAnimationClear.png"],
+                    "frames":
+						{
+						    "height": 150,
+						    "width": 150,
+						    "regX": 0,
+						    "regY": 0,
+						    "count": 11
+						}
+                });
+
+                var grant = new createjs.BitmapAnimation(ss);
+                grant.x = 36;
+                grant.y = 22;
+                grant.gotoAndPlay("run");
+
+                // Add Grant to the stage, and add it as a listener to Ticker to get updates each frame.
+                stage.addChild(grant);
+                createjs.Ticker.setFPS(60);
+                createjs.Ticker.addEventListener("tick", tick);
+            }
+
+            function tick() {
+                stage.update();
+            }
+
+            </script>
+    	<canvas id="testCanvas" width="960" height="400"></canvas>
+</body>
+</html>
