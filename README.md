@@ -1,2 +1,3 @@
-# This is my README
-# more crap
+# Shipanip - neverending spawn
+# WASD - moves your ship
+# SPACEBAR - shoots
