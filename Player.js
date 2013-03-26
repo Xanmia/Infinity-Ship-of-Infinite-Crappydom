@@ -14,6 +14,7 @@
         this.timepassed = 0;
         this.previousShot = 0;
 
+	this.health = 100;	
         this.reloadTime = 30;
 
         this.midpoint = function () {
