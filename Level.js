@@ -18,7 +18,13 @@
         this.timepassed += 1;
         this.player.update();
         for (var i = 0; i < this.cpu.length; i++) {
-            this.cpu[i].update();
+            if (this.cpu[i].active == true) {
+                this.cpu[i].update();
+            }
+            else {
+                this.cpu.splice(i, 1);
+            }
+            
         }
 
         if (this.timepassed - this.previousSpawn > this.spawnTime) {

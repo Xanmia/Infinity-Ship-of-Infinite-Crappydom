@@ -9,6 +9,8 @@
         this.y = y;
         this.sprite = new Sprite("laser");
         this.timepass = 0;
+
+        this.active = true;
 }
 
     Projectile.prototype.draw = function () {
@@ -18,6 +20,10 @@
     Projectile.prototype.update = function () {
         this.x += this.velocity;
         this.timepass += 1;
+
+        if (this.x < -100 || this.x > window.CANVAS_WIDTH + 100) {
+            this.active = false;
+        }
     }
 
     window.Projectile = Projectile;

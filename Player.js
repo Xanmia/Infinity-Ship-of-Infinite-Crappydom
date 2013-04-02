@@ -14,7 +14,7 @@
         this.timepassed = 0;
         this.previousShot = 0;
 
-	this.health = 100;	
+	    this.health = 100;	
         this.reloadTime = 30;
 
         this.midpoint = function () {
@@ -59,12 +59,16 @@
     }
 
 
-
     Player.prototype.update = function () {
         this.timepassed += 1;
         this.KeyActions();
         for (var i = 0; i < this.projectiles.length; i++) {
-            this.projectiles[i].update();
+            if (this.projectiles[i].active == true) {
+                this.projectiles[i].update();
+            }
+            else {
+                this.projectiles.splice(i, 1);
+            }
         }
     };
 
