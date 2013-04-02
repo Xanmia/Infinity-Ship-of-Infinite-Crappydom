@@ -23,6 +23,7 @@
         var CANVAS_WIDTH = 800;
         var CANVAS_HEIGHT = 600;
         var FPS = 60;
+        var TIME_PASSED = 0;
 
         var canvasElement = $("<canvas width='" + CANVAS_WIDTH +
           "' height='" + CANVAS_HEIGHT + "'></canvas");
@@ -38,6 +39,7 @@
 
 
         function update() {
+            TIME_PASSED += 1;
             level.update();
         }
 

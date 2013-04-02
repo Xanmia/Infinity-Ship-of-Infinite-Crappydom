@@ -8,14 +8,11 @@
 
         this.X = 500;
         this.Y = 150;
-        this.color = "#FF0000";
-        this.timepassed = 0;
         this.previousSpawn = 0;
         this.spawnTime = 90;
     }
 
     Level.prototype.update = function () {
-        this.timepassed += 1;
         this.player.update();
         for (var i = 0; i < this.cpu.length; i++) {
             if (this.cpu[i].active == true) {
@@ -24,12 +21,11 @@
             else {
                 this.cpu.splice(i, 1);
             }
-            
         }
 
-        if (this.timepassed - this.previousSpawn > this.spawnTime) {
+        if (window.TIME_PASSED - this.previousSpawn > this.spawnTime) {
             this.cpu.push(new CPU(canvas, window.CANVAS_WIDTH, Math.floor((Math.random() * window.CANVAS_HEIGHT) + 1)));
-            this.previousSpawn = this.timepassed;
+            this.previousSpawn = window.TIME_PASSED;
         }
              
     };

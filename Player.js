@@ -7,13 +7,10 @@
         this.Y = 51;
         this.width = 25;
         this.height = 50;
-        this.color = "#000000";
         this.sprite = new Sprite("ship3");
         this.projectiles = [];
 
-        this.timepassed = 0;
         this.previousShot = 0;
-
 	    this.health = 100;	
         this.reloadTime = 30;
 
@@ -26,10 +23,10 @@
     }
 
     Player.prototype.shoot = function () {
-        if (this.timepassed - this.previousShot > this.reloadTime || this.previousShot == 0) {
+        if (window.TIME_PASSED - this.previousShot > this.reloadTime || this.previousShot == 0) {
             var bulletPosition = this.midpoint();
             this.projectiles.push(new Projectile(canvas, bulletPosition.X, bulletPosition.Y, 5));
-            this.previousShot = this.timepassed;
+            this.previousShot = window.TIME_PASSED;
         }
        
     }
@@ -60,7 +57,6 @@
 
 
     Player.prototype.update = function () {
-        this.timepassed += 1;
         this.KeyActions();
         for (var i = 0; i < this.projectiles.length; i++) {
             if (this.projectiles[i].active == true) {

@@ -2,19 +2,16 @@
 
     function CPU(canvas, x, y) {
         this.canvas = canvas;
-        //this.color = "#00A";
         this.x = x;
         this.y = y;
         this.width = 50;
         this.height = 50;
         this.sprite = new Sprite("ship4");
-        this.speed = 3;
         this.projectiles = [];
         this.active = true;
 
-        this.timepassed = 0;
+        this.speed = 3;
         this.previousShot = 0;
-
         this.reloadTime = 50;
 
         this.midpoint = function () {
@@ -25,7 +22,6 @@
         };
     }
     CPU.prototype.update = function () {
-        this.timepassed += 1;
         this.x -= this.speed;
 
         if (this.x < -this.width || this.x > window.CANVAS_WIDTH + this.width) {
@@ -41,10 +37,10 @@
             }
         }
 
-        if (this.timepassed - this.previousShot > this.reloadTime && this.active==true) {
+        if (window.TIME_PASSED - this.previousShot > this.reloadTime && this.active == true) {
             var bulletPosition = this.midpoint();
             this.projectiles.push(new Projectile(canvas, bulletPosition.X, bulletPosition.Y, -5));
-            this.previousShot = this.timepassed;
+            this.previousShot = window.TIME_PASSED;
         }
     };
 
