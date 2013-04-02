@@ -9,6 +9,7 @@
         this.sprite = new Sprite("ship4");
         this.projectiles = [];
         this.active = true;
+        this.shipactive = true;
 
         this.speed = 3;
         this.previousShot = 0;
@@ -21,6 +22,12 @@
             };
         };
     }
+
+    CPU.prototype.explode = function () {
+        this.shipactive = false;
+        this.y = -window.CANVAS_WIDTH  //put off screen to go to die naturally
+    };
+
     CPU.prototype.update = function () {
         this.x -= this.speed;
 
@@ -29,6 +36,11 @@
         }
 
         for (var i = 0; i < this.projectiles.length; i++) {
+            if (collides(this.projectiles[i], window.level.player)) {
+               // call player hit here
+                this.projectiles[i].active = false;
+            }
+
             if (this.projectiles[i].active == true) {
                 this.projectiles[i].update();
             }
@@ -37,7 +49,7 @@
             }
         }
 
-        if (window.TIME_PASSED - this.previousShot > this.reloadTime && this.active == true) {
+        if (window.TIME_PASSED - this.previousShot > this.reloadTime && this.shipactive == true) {
             var bulletPosition = this.midpoint();
             this.projectiles.push(new Projectile(canvas, bulletPosition.X, bulletPosition.Y, -5));
             this.previousShot = window.TIME_PASSED;
@@ -45,7 +57,8 @@
     };
 
     CPU.prototype.draw = function () {
-        this.sprite.draw(this.canvas, this.x, this.y);
+        if (this.shipactive == true)
+            this.sprite.draw(this.canvas, this.x, this.y);
         for (var i = 0; i < this.projectiles.length; i++) {
             this.projectiles[i].draw();
         }

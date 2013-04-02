@@ -2,10 +2,11 @@
 
     function Projectile(canvas, x, y, velocity) {
         this.canvas = canvas
-        this.velocity = velocity
-       // this.color = "#00A";
+        this.velocity = velocity;
         this.x = x;
         this.y = y;
+        this.width = 20;
+        this.height = 10;
         this.sprite = new Sprite("laser");
 
         this.active = true;

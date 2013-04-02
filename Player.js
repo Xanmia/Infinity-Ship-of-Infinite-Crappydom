@@ -3,9 +3,9 @@
     function Player(canvas) {
         this.canvas = canvas
         this.movespeed = 2;
-        this.X = 52;
-        this.Y = 51;
-        this.width = 25;
+        this.x = 52;
+        this.y = 51;
+        this.width = 50;
         this.height = 50;
         this.sprite = new Sprite("ship3");
         this.projectiles = [];
@@ -16,8 +16,8 @@
 
         this.midpoint = function () {
             return {
-                X: this.X + this.width / 2,
-                Y: this.Y + this.height / 2
+                X: this.x + this.width / 2,
+                Y: this.y + this.height / 2
             };
         };
     }
@@ -28,37 +28,46 @@
             this.projectiles.push(new Projectile(canvas, bulletPosition.X, bulletPosition.Y, 5));
             this.previousShot = window.TIME_PASSED;
         }
-       
     }
 
     Player.prototype.KeyActions = function () {
         if (keydown.s) {
-            this.Y += this.movespeed;
+            this.y += this.movespeed;
         }
 
         if (keydown.w) {
-            this.Y -= this.movespeed;
+            this.y -= this.movespeed;
         }
 
         if (keydown.d) {
-            this.X += this.movespeed;
+            this.x += this.movespeed;
         }
 
         if (keydown.a) {
-            this.X -= this.movespeed;
+            this.x -= this.movespeed;
         }
-        this.Y = this.Y.clamp(0, window.CANVAS_HEIGHT - this.height);
-        this.X = this.X.clamp(0, window.CANVAS_WIDTH - this.width);
+        this.y = this.y.clamp(0, window.CANVAS_HEIGHT - this.height);
+        this.x = this.x.clamp(0, window.CANVAS_WIDTH - this.width);
+
+        
 
         if (keydown.space) {
             this.shoot();
+           // window.level.cpu[0].explode();
         }
     }
-
 
     Player.prototype.update = function () {
         this.KeyActions();
         for (var i = 0; i < this.projectiles.length; i++) {
+
+            for (var p = 0; p < window.level.cpu.length; p++) {
+                if (collides(this.projectiles[i], window.level.cpu[p])) {
+                    window.level.cpu[p].explode();
+                    this.projectiles[i].active = false;
+                }
+            }
+
             if (this.projectiles[i].active == true) {
                 this.projectiles[i].update();
             }
@@ -69,7 +78,7 @@
     };
 
     Player.prototype.draw = function () {
-        this.sprite.draw(this.canvas, this.X, this.Y);
+        this.sprite.draw(this.canvas, this.x, this.y);
         for (var i = 0; i < this.projectiles.length; i++) {
             this.projectiles[i].draw();
         }

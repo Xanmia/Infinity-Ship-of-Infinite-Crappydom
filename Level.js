@@ -6,8 +6,8 @@
         this.cpu = [];
         this.canvas = canvas
 
-        this.X = 500;
-        this.Y = 150;
+        //this.X = 500;
+        //this.Y = 150;
         this.previousSpawn = 0;
         this.spawnTime = 90;
     }
