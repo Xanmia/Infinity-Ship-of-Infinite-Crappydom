@@ -1,11 +1,13 @@
 ﻿(function (window) {
 
     function Level(canvas) {
-        this.player = new Player(canvas);
-        this.background1 = new Sprite("background");
+    
+        this.background1 = new createjs.Bitmap("images/background.png"); //new Sprite("background");
         this.cpu = [];
         this.canvas = canvas
+        this.canvas.addChild(this.background1);
 
+        this.player = new Player(canvas);
         //this.X = 500;
         //this.Y = 150;
         this.previousSpawn = 0;
@@ -20,11 +22,12 @@
             }
             else {
                 this.cpu.splice(i, 1);
+                
             }
         }
 
         if (window.TIME_PASSED - this.previousSpawn > this.spawnTime) {
-            this.cpu.push(new CPU(canvas, window.CANVAS_WIDTH, Math.floor((Math.random() * window.CANVAS_HEIGHT) + 1)));
+            this.cpu.push(new CPU(this.canvas, window.CANVAS_WIDTH, Math.floor((Math.random() * window.CANVAS_HEIGHT) + 1)));
             this.previousSpawn = window.TIME_PASSED;
         }
              
