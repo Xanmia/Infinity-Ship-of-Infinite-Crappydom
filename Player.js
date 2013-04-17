@@ -7,6 +7,9 @@
         this.y = 51;
         this.width = 25;
         this.height = 50;
+        this.enabled = true;
+
+        this.animation;
 
         this.sprite = new createjs.Bitmap("images/ship3.png");
         this.canvas.addChild(this.sprite);
@@ -25,13 +28,23 @@
         };
     }
 
+
     Player.prototype.shoot = function () {
         if (window.TIME_PASSED - this.previousShot > this.reloadTime || this.previousShot == 0) {
             var bulletPosition = this.midpoint();
-            this.projectiles.push(new Projectile(this.canvas, bulletPosition.X, bulletPosition.Y, 5));
+            this.projectiles.push(new Projectile(this.canvas, bulletPosition.X, bulletPosition.Y, 20));
             this.previousShot = window.TIME_PASSED;
         }
     }
+
+    Player.prototype.hit = function () {
+        this.health -= 20;
+    }
+
+    Player.prototype.explode = function () {
+        this.animation = new Animation(this.canvas);
+        this.animation.Explode(this.x - 50, this.y - 50);  ///-50 because the alignment is f'ed up for some reason
+    };
 
     Player.prototype.KeyActions = function () {
         if (keydown.s) {
@@ -49,8 +62,8 @@
         if (keydown.a) {
             this.x -= this.movespeed;
         }
-       // this.y = this.y.clamp(0, window.CANVAS_HEIGHT - this.height);
-       // this.x = this.x.clamp(0, window.CANVAS_WIDTH - this.width);
+        this.y = this.y.clamp(0, window.CANVAS_HEIGHT - this.height);
+        this.x = this.x.clamp(0, window.CANVAS_WIDTH - this.width);
 
         this.sprite.x = this.x;
         this.sprite.y = this.y;
@@ -62,6 +75,11 @@
     }
 
     Player.prototype.update = function () {
+        if (this.health < 0 && this.enabled == true) {
+            this.explode();
+            this.enabled = false;
+        }
+
         this.KeyActions();
         for (var i = 0; i < this.projectiles.length; i++) {
 
@@ -81,13 +99,6 @@
             }
         }
     };
-
-  //  Player.prototype.draw = function () {
-  //     this.sprite.draw(this.canvas, this.x, this.y);
-  //      for (var i = 0; i < this.projectiles.length; i++) {
-  //          this.projectiles[i].draw();
-  //      }
-  //  };
 
 window.Player = Player;
 

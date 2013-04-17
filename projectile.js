@@ -16,10 +16,6 @@
         this.active = true;
 }
 
-    Projectile.prototype.draw = function () {
-        this.sprite.draw(this.canvas, this.x, this.y);
-    }
-
     Projectile.prototype.dispose = function () {
         this.active = false;
         this.canvas.removeChild(this.sprite);

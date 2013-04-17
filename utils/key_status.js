@@ -1,6 +1,6 @@
 $(function() {
   window.keydown = {};
-  
+  window.keyup = {};
   function keyName(event) {
     return jQuery.hotkeys.specialKeys[event.which] ||
       String.fromCharCode(event.which).toLowerCase();

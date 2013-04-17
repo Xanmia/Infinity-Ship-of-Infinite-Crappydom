@@ -1,12 +1,11 @@
 ﻿(function (window) {
 
-    function CPU(canvas, x, y) {
+    function CPU(canvas, x, y, speed) {
         this.canvas = canvas;
         this.x = x;
         this.y = y;
         this.width = 50;
         this.height = 50;
-       // this.sprite = new Sprite("ship4");
 
         this.sprite = new createjs.Bitmap("images/ship4.png");
         this.sprite.x = x;
@@ -20,7 +19,7 @@
         this.active = true;
         this.shipactive = true;
 
-        this.speed = 3;
+        this.speed = speed;
         this.previousShot = 0;
         this.reloadTime = 50;
 
@@ -53,7 +52,7 @@
 
         for (var i = 0; i < this.projectiles.length; i++) {
             if (collides(this.projectiles[i], window.level.player)) {
-               // call player hit here
+                window.level.player.hit();
                 this.projectiles[i].dispose();
             }
 
@@ -69,16 +68,8 @@
 
         if (window.TIME_PASSED - this.previousShot > this.reloadTime && this.shipactive == true) {
             var bulletPosition = this.midpoint();
-            this.projectiles.push(new Projectile(this.canvas, bulletPosition.X, bulletPosition.Y, -5));
+            this.projectiles.push(new Projectile(this.canvas, bulletPosition.X, bulletPosition.Y, -20));
             this.previousShot = window.TIME_PASSED;
-        }
-    };
-
-    CPU.prototype.draw = function () {
-        if (this.shipactive == true)
-            this.sprite.draw(this.canvas, this.x, this.y);
-        for (var i = 0; i < this.projectiles.length; i++) {
-            this.projectiles[i].draw();
         }
     };
 

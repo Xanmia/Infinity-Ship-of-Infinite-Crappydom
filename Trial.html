@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<!DOCTYPE html>
 <html ng-app>
   <head>
     <title>Space Demo</title>
@@ -9,12 +9,13 @@
       }
     </style>
     <script language="javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js" type="text/javascript"></script>
-    <script language="javascript" src=" https://ajax.googleapis.com/ajax/libs/angularjs/1.0.6/angular.min.js" type="text/javascript"></script>
+    <script language="javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.6/angular.min.js" type="text/javascript"></script>
     <script language="javascript" src="Player.js" type="text/javascript"></script>
     <script language="javascript" src="Level.js" type="text/javascript"></script>
     <script language="javascript" src="CPU.js" type="text/javascript"></script>
     <script language="javascript" src="projectile.js" type="text/javascript"></script>    
     <script language="javascript" src="animations.js" type="text/javascript"></script>    
+    <script language="javascript" src="Splashscreen.js" type="text/javascript"></script>    
     <script language="javascript" src="settingsManager.js" type="text/javascript"></script>    
 
     <script language="javascript" src="utils/easeljs-0.6.0.min.js" type="text/javascript"></script>   
@@ -32,7 +33,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="brand" href="#">---</a>
+          <a class="brand" href="#">Craptastalic Games</a>
           <div class="nav-collapse collapse">
             <ul class="nav">
               <li class="active"><a href="#">Home</a></li>
@@ -46,34 +47,49 @@
 
     <div class="container">
         <h1>shit</h1>
+
+    <canvas id='testCanvas' width='800' height='600'></canvas>
+
     <script type='text/javascript'>
         //<![CDATA[
         var CANVAS_WIDTH = 800;
         var CANVAS_HEIGHT = 600;
-        var FPS = 60;
         var TIME_PASSED = 0;
         var stage;
+        var GameStatus = {
+            START: { value: 0},
+            PLAYING: { value: 1},
+            DEAD: { value: 2}
+        };
+        var currentGameStatus = GameStatus.START;
 
-        var canvasElement = $("<canvas id='testCanvas' width='" + CANVAS_WIDTH +
-          "' height='" + CANVAS_HEIGHT + "'></canvas>");
-        var canvas = canvasElement.get(0).getContext("2d");
-        canvasElement.appendTo('body');
+     //   var canvasElement = $("<canvas id='testCanvas' width='" + CANVAS_WIDTH +
+     //     "' height='" + CANVAS_HEIGHT + "'></canvas>");
+     //   var canvas = canvasElement.get(0).getContext("2d");
+     //   canvasElement.appendTo('body');
 
        stage = new createjs.Stage(document.getElementById("testCanvas"));
 
-        var level = new Level(stage);
-       // var ani = new Animation(stage);
+       var level ; //= new Level(stage);
+       var currentScreen = new SplashScreen(stage);
 
-
-        createjs.Ticker.setFPS(60);
+        createjs.Ticker.setFPS(40);
         createjs.Ticker.addEventListener("tick", tick);
-        
-        //ani.Explode(50, 50);
+       
 
         function tick() {
             TIME_PASSED += 1;
             //canvas.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-            level.update();         
+            if (currentGameStatus == GameStatus.START) {
+                currentScreen.update();
+            }
+            else if (currentGameStatus == GameStatus.PLAYING) {
+                level.update();
+            }
+            else if (currentGameStatus == GameStatus.DEAD) {
+                //
+            }
+                   
             stage.update();
 
   
@@ -86,24 +102,24 @@
         //}, 1000 / FPS);
 
 
-        function update() {
-            TIME_PASSED += 1;
-            level.update();
-        }
+       // function update() {
+        //    TIME_PASSED += 1;
+        //    level.update();
+       // }
 
 
-        function draw() {
-            //canvas.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);  //clear stage
-            canvas.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-            level.draw();
+      //  function draw() {
+      //      //canvas.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);  //clear stage
+      //      canvas.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+       //     level.draw();
         
-        }
+      //  }
 
 
         //]]>
     </script>
 
-      
+      <h4>Settings</h4>
     <div ng-controller="GameSettings">
          <form ng-submit="updateSettings()">
      ship speed: <input type="text" ng-model="ShipSpeed" >

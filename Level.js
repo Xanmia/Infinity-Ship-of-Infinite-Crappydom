@@ -8,10 +8,8 @@
         this.canvas.addChild(this.background1);
 
         this.player = new Player(canvas);
-        //this.X = 500;
-        //this.Y = 150;
         this.previousSpawn = 0;
-        this.spawnTime = 90;
+        this.spawnTime = 50;
     }
 
     Level.prototype.update = function () {
@@ -26,21 +24,16 @@
             }
         }
 
-        if (window.TIME_PASSED - this.previousSpawn > this.spawnTime) {
-            this.cpu.push(new CPU(this.canvas, window.CANVAS_WIDTH, Math.floor((Math.random() * window.CANVAS_HEIGHT) + 1)));
-            this.previousSpawn = window.TIME_PASSED;
-        }
+        this.addCPU();
              
     };
 
-    Level.prototype.draw = function () {
-        this.background1.draw(this.canvas, 0, 0);
-        this.player.draw();
-        for (var i = 0; i < this.cpu.length; i++) {
-            this.cpu[i].draw();
+    Level.prototype.addCPU = function () {
+        if (window.TIME_PASSED - this.previousSpawn > this.spawnTime) {
+            this.cpu.push(new CPU(this.canvas, window.CANVAS_WIDTH, Math.floor((Math.random() * window.CANVAS_HEIGHT) + 1), Math.floor((Math.random() * 5) + 3)));
+            this.previousSpawn = window.TIME_PASSED;
         }
     };
-
 
     window.Level = Level;
 
