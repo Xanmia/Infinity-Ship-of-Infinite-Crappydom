@@ -2,7 +2,7 @@
 
     function Player(canvas) {
         this.canvas = canvas
-        this.movespeed = 4;
+        this.movespeed = 6;
         this.x = 52;
         this.y = 51;
         this.width = 25;
@@ -11,7 +11,7 @@
 
         this.animation;
 
-        this.sprite = new createjs.Bitmap("images/ship3.png");
+        this.sprite = new createjs.Bitmap(playershipimg);
         this.canvas.addChild(this.sprite);
 
         this.projectiles = [];
@@ -44,6 +44,7 @@
     Player.prototype.explode = function () {
         this.animation = new Animation(this.canvas);
         this.animation.Explode(this.x - 50, this.y - 50);  ///-50 because the alignment is f'ed up for some reason
+        this.canvas.removeChild(this.sprite);
     };
 
     Player.prototype.KeyActions = function () {
@@ -70,7 +71,6 @@
 
         if (keydown.space) {
             this.shoot();
-           // window.level.cpu[0].explode();
         }
     }
 
@@ -84,7 +84,9 @@
         for (var i = 0; i < this.projectiles.length; i++) {
 
             for (var p = 0; p < window.level.cpu.length; p++) {
+                
                 if (collides(this.projectiles[i], window.level.cpu[p])) {
+                    
                     window.level.cpu[p].explode();
                     this.projectiles[i].dispose();
                 }

@@ -8,7 +8,7 @@
         this.width = 20;
         this.height = 10;
 
-        this.sprite = new createjs.Bitmap("images/laser.png");
+        this.sprite = new createjs.Bitmap(projectileimg);
         this.sprite.x = x;
         this.sprite.y = y;
         this.canvas.addChild(this.sprite);
@@ -25,7 +25,8 @@
         this.x += this.velocity;
         this.sprite.x = this.x;
 
-        if (this.x < -100 || this.x > window.CANVAS_WIDTH + 100) {
+
+        if (this.x < -20 || this.x > window.CANVAS_WIDTH) {
             this.dispose();
         }
         

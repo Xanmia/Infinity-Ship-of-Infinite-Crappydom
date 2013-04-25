@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html ng-app>
+<html>
   <head>
     <title>Space Demo</title>
     <link href="stylesheets/bootstrap.min.css" media="all" rel="stylesheet" type="text/css"/>
@@ -9,17 +9,14 @@
       }
     </style>
     <script language="javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js" type="text/javascript"></script>
-    <script language="javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.6/angular.min.js" type="text/javascript"></script>
     <script language="javascript" src="Player.js" type="text/javascript"></script>
     <script language="javascript" src="Level.js" type="text/javascript"></script>
     <script language="javascript" src="CPU.js" type="text/javascript"></script>
     <script language="javascript" src="projectile.js" type="text/javascript"></script>    
     <script language="javascript" src="animations.js" type="text/javascript"></script>    
-    <script language="javascript" src="Splashscreen.js" type="text/javascript"></script>    
-    <script language="javascript" src="settingsManager.js" type="text/javascript"></script>    
+    <script language="javascript" src="Splashscreen.js" type="text/javascript"></script>     
 
     <script language="javascript" src="utils/easeljs-0.6.0.min.js" type="text/javascript"></script>   
-    <script language="javascript" src="utils/sprite.js" type="text/javascript"></script>
     <script language="javascript" src="utils/jquery.hotkeys.js" type="text/javascript"></script>
     <script language="javascript" src="utils/key_status.js" type="text/javascript"></script>
     <script language="javascript" src="utils/util.js" type="text/javascript"></script>
@@ -46,7 +43,7 @@
     </div>
 
     <div class="container">
-        <h1>shit</h1>
+        <h1>Infinity Ship of Infinite Crappydom</h1>
 
     <canvas id='testCanvas' width='800' height='600'></canvas>
 
@@ -55,78 +52,101 @@
         var CANVAS_WIDTH = 800;
         var CANVAS_HEIGHT = 600;
         var TIME_PASSED = 0;
+        var LEVEL_Number = 0;
         var stage;
+        var currentScreen;
+        var level;
+
+        /////image loading///
+        var backgroundimg = new Image();
+        var enemyshipimg = new Image();
+        var playershipimg = new Image();
+        var titlescreenimg = new Image();
+        var projectileimg = new Image();
+        var explosionimg = new Image();
+        /////////////////////
+        
         var GameStatus = {
             START: { value: 0},
-            PLAYING: { value: 1},
+            PLAYING: { value: 1 },
+            NEXTSTAGE: { value: 3 },
             DEAD: { value: 2}
         };
         var currentGameStatus = GameStatus.START;
 
-     //   var canvasElement = $("<canvas id='testCanvas' width='" + CANVAS_WIDTH +
-     //     "' height='" + CANVAS_HEIGHT + "'></canvas>");
-     //   var canvas = canvasElement.get(0).getContext("2d");
-     //   canvasElement.appendTo('body');
-
        stage = new createjs.Stage(document.getElementById("testCanvas"));
 
-       var level ; //= new Level(stage);
-       var currentScreen = new SplashScreen(stage);
 
-        createjs.Ticker.setFPS(40);
-        createjs.Ticker.addEventListener("tick", tick);
+       init();
        
+        function init() {
+            SetDownloadParameters(enemyshipimg, "images/ship4.png");
+            SetDownloadParameters(playershipimg, "images/ship3.png");
+            SetDownloadParameters(titlescreenimg, "images/title.png");
+            SetDownloadParameters(projectileimg, "images/laser.png");
+            SetDownloadParameters(explosionimg, "images/ExplosionAnimationClear.png");
+            SetDownloadParameters(backgroundimg, "images/background.png");
+            
+            titleScreen();
+
+            createjs.Ticker.setFPS(36);
+            createjs.Ticker.addEventListener("tick", tick);
+        }
+
+        function SetDownloadParameters(assetElement, url) {
+            assetElement.src = url;
+            //assetElement.onload = handleElementLoad;
+        };
+
+        function titleScreen() {
+            currentScreen = new SplashScreen(stage);
+            currentScreen.setTitleScreen();
+            LEVEL_Number = 1;
+        }
+
+        function NextLevelScreen() {
+            currentGameStatus = GameStatus.NEXTSTAGE;
+            currentScreen.setnextLevelScreen();
+            LEVEL_Number += 1;
+        }
+
+        function loseScreen() {
+            currentGameStatus = GameStatus.DEAD;
+            currentScreen.setLoseScreen();
+        }
+
+        function startPlaying() {
+            currentGameStatus = GameStatus.PLAYING;
+            stage.removeAllChildren();/////////////////////////////////////
+            level = new Level(stage, LEVEL_Number);
+        }
 
         function tick() {
             TIME_PASSED += 1;
-            //canvas.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+
             if (currentGameStatus == GameStatus.START) {
                 currentScreen.update();
             }
             else if (currentGameStatus == GameStatus.PLAYING) {
+                
                 level.update();
             }
-            else if (currentGameStatus == GameStatus.DEAD) {
-                //
+            else if (currentGameStatus == GameStatus.NEXTSTAGE) {
+                currentScreen.update();
             }
-                   
+            else if (currentGameStatus == GameStatus.DEAD)
+            {
+                currentScreen.update();
+            }
+ 
             stage.update();
-
-  
         }
-
-
-       // setInterval(function () {
-       //    update();
-        //    this.draw();
-        //}, 1000 / FPS);
-
-
-       // function update() {
-        //    TIME_PASSED += 1;
-        //    level.update();
-       // }
-
-
-      //  function draw() {
-      //      //canvas.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);  //clear stage
-      //      canvas.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-       //     level.draw();
-        
-      //  }
 
 
         //]]>
     </script>
-
-      <h4>Settings</h4>
-    <div ng-controller="GameSettings">
-         <form ng-submit="updateSettings()">
-     ship speed: <input type="text" ng-model="ShipSpeed" >
-     ship reload speed: <input type="text" ng-model="ReloadSpeed"  >
-         <input type="submit" value="add">
-             </form>
-    </div>
+     <br />w,a,s,d - to move
+     <br />space - shoot
 </div>
   </body>
 </html>
