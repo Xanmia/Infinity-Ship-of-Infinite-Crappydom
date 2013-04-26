@@ -2,22 +2,13 @@
 
     function Level(canvas, level_number) {
     
-        this.background1 = new createjs.Bitmap(backgroundimg); //new Sprite("background");
+        this.background1 = new createjs.Bitmap(backgroundimg);
         this.cpu = [];
         this.canvas = canvas
         this.canvas.addChild(this.background1);
-
-        this.disabledCPU = 0;
-
-        this.CPUspawned = 0;
         this.totalCPU = level_number * 3;
 
         this.player = new Player(canvas);
-        this.previousSpawn = 0;
-        this.spawnTime = 50;
-
-        this.status = "pending";
-
 
         for (var i = 0; i < this.totalCPU; i++) {
             this.cpu.push(new CPU(this.canvas, (window.CANVAS_WIDTH + (Math.random() * (CANVAS_WIDTH*(level_number-1)))), Math.floor((Math.random() * window.CANVAS_HEIGHT) + 1), Math.floor((Math.random() * 6) + 3)));
@@ -48,10 +39,6 @@
         }
 
         this.enemiestxt.text = "Crap left: " + this.cpu.length;
-     //   if (!(this.totalCPU == this.CPUspawned)) {
-     //       this.addCPU();
-     //   }
-
 
         if (this.player.enabled == false) {
             loseScreen();
@@ -61,14 +48,6 @@
         }
 
     };
-
-  //  Level.prototype.addCPU = function () {
-  //      if (window.TIME_PASSED - this.previousSpawn > this.spawnTime) {
-  //          this.cpu.push(new CPU(this.canvas, window.CANVAS_WIDTH, Math.floor((Math.random() * window.CANVAS_HEIGHT) + 1), Math.floor((Math.random() * 5) + 3)));
-  //          this.previousSpawn = window.TIME_PASSED;
-  //          this.CPUspawned += 1;
-  //      }
-  //  };
 
     window.Level = Level;
 

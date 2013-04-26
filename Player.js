@@ -5,20 +5,45 @@
         this.movespeed = 6;
         this.x = 52;
         this.y = 51;
-        this.width = 25;
-        this.height = 50;
+        this.width = 60;
+        this.height = 74;
         this.enabled = true;
 
         this.animation;
-
-        this.sprite = new createjs.Bitmap(playershipimg);
-        this.canvas.addChild(this.sprite);
 
         this.projectiles = [];
 
         this.previousShot = 0;
 	    this.health = 100;	
-        this.reloadTime = 30;
+	    this.reloadTime = 30;
+
+
+	    this.ss = new createjs.SpriteSheet({
+	        "animations":
+            {
+                "normal": [0, 0, true],
+                "up": [1, 1, true],
+                "down": [2, 2, true]
+            },
+	        "images": [playershipimg],
+	        "frames":
+                {
+                    "height": 74,
+                    "width": 60,
+                    "regX": 0,
+                    "regY": 0,
+                    "count": 3
+                }
+	    });
+
+	    this.sprite = new createjs.BitmapAnimation(this.ss);
+	    this.sprite.x = this.x;
+	    this.sprite.y = this.y;
+	    this.sprite.gotoAndPlay("normal");
+
+	    this.canvas.addChild(this.sprite);
+
+
 
         this.midpoint = function () {
             return {
@@ -50,18 +75,26 @@
     Player.prototype.KeyActions = function () {
         if (keydown.s) {
             this.y += this.movespeed;
+            this.sprite.gotoAndPlay("down");
+            this.height = 44;
         }
 
         if (keydown.w) {
             this.y -= this.movespeed;
+            this.sprite.gotoAndPlay("up");
+            this.height = 44;
         }
 
         if (keydown.d) {
             this.x += this.movespeed;
+            this.sprite.gotoAndPlay("normal");
+            this.height = 74;
         }
 
         if (keydown.a) {
             this.x -= this.movespeed;
+            this.sprite.gotoAndPlay("normal");
+            this.height = 74;
         }
         this.y = this.y.clamp(0, window.CANVAS_HEIGHT - this.height);
         this.x = this.x.clamp(0, window.CANVAS_WIDTH - this.width);
@@ -92,12 +125,21 @@
                 }
             }
 
+
             if (this.projectiles[i].active == true) {
                 this.projectiles[i].update();
             }
             else {
                 this.projectiles[i].dispose();
                 this.projectiles.splice(i, 1);
+            }
+        }
+
+        for (var p = 0; p < window.level.cpu.length; p++) {
+
+            if (collides(this, window.level.cpu[p])) {
+                this.hit();
+                window.level.cpu[p].explode();
             }
         }
     };

@@ -5,8 +5,8 @@
         this.velocity = velocity;
         this.x = x;
         this.y = y;
-        this.width = 20;
-        this.height = 10;
+        this.width = 20;//
+        this.height = 10;///
 
         this.sprite = new createjs.Bitmap(projectileimg);
         this.sprite.x = x;
